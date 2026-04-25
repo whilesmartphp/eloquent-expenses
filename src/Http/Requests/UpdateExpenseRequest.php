@@ -3,12 +3,15 @@
 namespace Whilesmart\Expenses\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Whilesmart\OwnerAccess\Concerns\AuthorizesOwnerRequest;
 
 class UpdateExpenseRequest extends FormRequest
 {
+    use AuthorizesOwnerRequest;
+
     public function authorize(): bool
     {
-        return true;
+        return $this->authorizeOwnerOfBoundModel('expense');
     }
 
     public function rules(): array

@@ -3,7 +3,10 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Whilesmart\Expenses\ExpensesServiceProvider;
+use Whilesmart\OwnerAccess\OwnerAccessServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -15,13 +18,13 @@ abstract class TestCase extends BaseTestCase
 
         // Separate tables for test host models so polymorphic type columns
         // genuinely disambiguate different record sources.
-        \Illuminate\Support\Facades\Schema::create('workspaces', function ($table) {
+        Schema::create('workspaces', function ($table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
         });
 
-        \Illuminate\Support\Facades\Schema::create('suppliers', function ($table) {
+        Schema::create('suppliers', function ($table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -31,7 +34,8 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app): array
     {
         return [
-            \Whilesmart\Expenses\ExpensesServiceProvider::class,
+            OwnerAccessServiceProvider::class,
+            ExpensesServiceProvider::class,
         ];
     }
 

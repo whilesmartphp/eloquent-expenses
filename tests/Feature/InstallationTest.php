@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Whilesmart\Expenses\ExpensesServiceProvider;
 
 class InstallationTest extends TestCase
 {
@@ -44,11 +46,11 @@ class InstallationTest extends TestCase
     #[Test]
     public function publishable_tags_are_registered(): void
     {
-        $provider = app()->getProvider(\Whilesmart\Expenses\ExpensesServiceProvider::class);
+        $provider = app()->getProvider(ExpensesServiceProvider::class);
         $this->assertNotNull($provider, 'ExpensesServiceProvider must be registered.');
 
-        $configTag = \Illuminate\Support\ServiceProvider::$publishGroups['expenses-config'] ?? null;
-        $migrationsTag = \Illuminate\Support\ServiceProvider::$publishGroups['expenses-migrations'] ?? null;
+        $configTag = ServiceProvider::$publishGroups['expenses-config'] ?? null;
+        $migrationsTag = ServiceProvider::$publishGroups['expenses-migrations'] ?? null;
 
         $this->assertNotNull($configTag, 'Missing expenses-config publish tag.');
         $this->assertNotNull($migrationsTag, 'Missing expenses-migrations publish tag.');

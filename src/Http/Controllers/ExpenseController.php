@@ -9,12 +9,15 @@ use Whilesmart\Expenses\Http\Requests\StoreExpenseRequest;
 use Whilesmart\Expenses\Http\Requests\UpdateExpenseRequest;
 use Whilesmart\Expenses\Http\Resources\ExpenseResource;
 use Whilesmart\Expenses\Models\Expense;
+use Whilesmart\OwnerAccess\Concerns\AuthorizesOwnerController;
 
 class ExpenseController extends Controller
 {
+    use AuthorizesOwnerController;
+
     public function index(Request $request): JsonResponse
     {
-        $query = Expense::query();
+        $query = $this->scopeAccessibleOwners(Expense::query(), $request->user());
 
         if ($request->filled('owner_type') && $request->filled('owner_id')) {
             $query->where('owner_type', $request->input('owner_type'))
@@ -73,8 +76,10 @@ class ExpenseController extends Controller
         ], 201);
     }
 
-    public function show(Expense $expense): JsonResponse
+    public function show(Expense $expense, Request $request): JsonResponse
     {
+        $this->authorizeAccessTo($expense, $request->user());
+
         return response()->json([
             'success' => true,
             'data' => new ExpenseResource($expense->load('vendor')),
@@ -92,8 +97,9 @@ class ExpenseController extends Controller
         ]);
     }
 
-    public function destroy(Expense $expense): JsonResponse
+    public function destroy(Expense $expense, Request $request): JsonResponse
     {
+        $this->authorizeAccessTo($expense, $request->user());
         $expense->delete();
 
         return response()->json([

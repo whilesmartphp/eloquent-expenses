@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Support\HostSupplier;
 use Tests\Support\HostWorkspace;
 use Tests\TestCase;
 use Whilesmart\Expenses\Models\Expense;
