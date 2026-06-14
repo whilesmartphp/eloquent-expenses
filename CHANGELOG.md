@@ -2,6 +2,12 @@
 
 All notable changes to `whilesmart/eloquent-expenses` are documented here.
 
+## [1.1.0] - 2026-06-14
+
+- `fee_cents` column for transaction charges (rail or processing fees), validated and exposed by the API
+- `total_cents` now sums amount, tax, and fee; recomputed on create and update
+- Additive migration adds `fee_cents` to existing installs
+
 ## [1.0.0] - 2026-04-24
 
 - Initial release
