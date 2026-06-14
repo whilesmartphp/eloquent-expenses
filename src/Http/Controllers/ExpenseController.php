@@ -65,10 +65,8 @@ class ExpenseController extends Controller
 
     public function store(StoreExpenseRequest $request): JsonResponse
     {
-        $data = $request->validated();
-        $data['total_cents'] = ($data['amount_cents'] ?? 0) + ($data['tax_cents'] ?? 0);
-
-        $expense = Expense::create($data);
+        $expense = (new Expense)->fill($request->validated());
+        $expense->recalculate()->save();
 
         return response()->json([
             'success' => true,

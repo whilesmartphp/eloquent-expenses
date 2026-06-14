@@ -29,6 +29,7 @@ class StoreExpenseRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'amount_cents' => ['required', 'integer', 'min:0'],
             'tax_cents' => ['nullable', 'integer', 'min:0'],
+            'fee_cents' => ['nullable', 'integer', 'min:0'],
             'currency' => ['nullable', 'string', 'size:3'],
             'status' => ['nullable', 'in:draft,submitted,approved,paid,rejected'],
             'payment_method' => ['nullable', 'string', 'max:50'],
