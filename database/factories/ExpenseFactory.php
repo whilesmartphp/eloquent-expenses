@@ -14,6 +14,7 @@ class ExpenseFactory extends Factory
     {
         $amount = $this->faker->numberBetween(500, 500000);
         $tax = (int) round($amount * 0.18);
+        $fee = 0;
 
         return [
             'number' => 'EXP-'.$this->faker->unique()->numberBetween(1000, 9999),
@@ -22,7 +23,8 @@ class ExpenseFactory extends Factory
             'description' => $this->faker->sentence(),
             'amount_cents' => $amount,
             'tax_cents' => $tax,
-            'total_cents' => $amount + $tax,
+            'fee_cents' => $fee,
+            'total_cents' => $amount + $tax + $fee,
             'currency' => 'USD',
             'status' => ExpenseStatus::Draft->value,
             'incurred_at' => $this->faker->dateTimeBetween('-90 days', 'now'),

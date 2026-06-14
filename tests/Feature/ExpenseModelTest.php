@@ -108,6 +108,36 @@ class ExpenseModelTest extends TestCase
     }
 
     #[Test]
+    public function recalculate_sums_amount_tax_and_fee(): void
+    {
+        $expense = new Expense([
+            'amount_cents' => 20_000,
+            'tax_cents' => 3_600,
+            'fee_cents' => 400,
+            'currency' => 'USD',
+        ]);
+
+        $expense->recalculate();
+
+        $this->assertSame(24_000, $expense->total_cents);
+    }
+
+    #[Test]
+    public function recalculate_handles_null_fee_as_zero(): void
+    {
+        $expense = new Expense([
+            'amount_cents' => 20_000,
+            'tax_cents' => 0,
+            'fee_cents' => null,
+            'currency' => 'USD',
+        ]);
+
+        $expense->recalculate();
+
+        $this->assertSame(20_000, $expense->total_cents);
+    }
+
+    #[Test]
     public function status_column_casts_to_enum(): void
     {
         $ws = HostWorkspace::create(['name' => 'Acme']);

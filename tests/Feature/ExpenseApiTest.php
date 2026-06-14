@@ -31,6 +31,43 @@ class ExpenseApiTest extends TestCase
     }
 
     #[Test]
+    public function post_adds_transaction_fee_to_the_total(): void
+    {
+        $ws = HostWorkspace::create(['name' => 'Acme']);
+
+        $response = $this->postJson('/api/expenses', [
+            'owner_type' => HostWorkspace::class,
+            'owner_id' => $ws->id,
+            'vendor_name' => 'Mobile money payout',
+            'amount_cents' => 8_000,
+            'tax_cents' => 1_200,
+            'fee_cents' => 300,
+            'currency' => 'USD',
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonPath('data.fee_cents', 300);
+        $response->assertJsonPath('data.total_cents', 9_500);
+    }
+
+    #[Test]
+    public function post_rejects_negative_fee(): void
+    {
+        $ws = HostWorkspace::create(['name' => 'Acme']);
+
+        $response = $this->postJson('/api/expenses', [
+            'owner_type' => HostWorkspace::class,
+            'owner_id' => $ws->id,
+            'amount_cents' => 1_000,
+            'fee_cents' => -50,
+            'currency' => 'USD',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['fee_cents']);
+    }
+
+    #[Test]
     public function post_rejects_without_required_amount(): void
     {
         $ws = HostWorkspace::create(['name' => 'Acme']);
