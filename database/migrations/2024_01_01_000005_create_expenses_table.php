@@ -31,6 +31,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->bigInteger('amount_cents')->default(0);
             $table->bigInteger('tax_cents')->default(0);
+            $table->bigInteger('fee_cents')->default(0);
             $table->bigInteger('total_cents')->default(0);
             $table->string('currency', 3)->default('USD');
             $table->string('status')->default('draft');

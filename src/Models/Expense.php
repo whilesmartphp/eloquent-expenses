@@ -53,7 +53,9 @@ class Expense extends Model
 
     public function recalculate(): self
     {
-        $this->total_cents = $this->amount_cents + $this->tax_cents;
+        $this->total_cents = (int) $this->amount_cents
+            + (int) $this->tax_cents
+            + (int) $this->fee_cents;
 
         return $this;
     }

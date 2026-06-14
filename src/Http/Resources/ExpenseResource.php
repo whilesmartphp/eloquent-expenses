@@ -24,6 +24,7 @@ class ExpenseResource extends JsonResource
             'description' => $this->description,
             'amount_cents' => $this->amount_cents,
             'tax_cents' => $this->tax_cents,
+            'fee_cents' => $this->fee_cents,
             'total_cents' => $this->total_cents,
             'currency' => $this->currency,
             'status' => $this->status,
